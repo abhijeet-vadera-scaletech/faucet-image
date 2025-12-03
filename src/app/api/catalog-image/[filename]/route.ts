@@ -13,7 +13,7 @@ export async function GET(
       return NextResponse.json({ error: "Filename required" }, { status: 400 });
     }
 
-    const catalogDir = path.join(process.cwd(), "src/assets/input_images");
+    const catalogDir = path.join(process.cwd(), "public/catalog-images");
     const filePath = path.join(catalogDir, filename);
 
     // Security check: ensure the file is within the catalog directory

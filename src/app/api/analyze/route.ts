@@ -78,18 +78,15 @@ function loadImageMetadata(): ImageMetadata {
     return imageMetadataCache;
   }
 
-  const metadataPath = path.join(
-    process.cwd(),
-    "src/config/image_metadata.json"
-  );
+  const METADATA_FILE = path.join(process.cwd(), "public/image_metadata.json");
 
-  if (!fs.existsSync(metadataPath)) {
-    console.warn("Metadata file not found:", metadataPath);
+  if (!fs.existsSync(METADATA_FILE)) {
+    console.warn("Metadata file not found:", METADATA_FILE);
     return {};
   }
 
   try {
-    const rawData = fs.readFileSync(metadataPath, "utf-8");
+    const rawData = fs.readFileSync(METADATA_FILE, "utf-8");
     const fullMetadata = JSON.parse(rawData) as ImageMetadata;
 
     // Extract only the fields we need (like the Python version)
@@ -123,17 +120,17 @@ function buildCatalogContext(): Part[] {
     return catalogContextCache;
   }
 
-  const catalogDir = path.join(process.cwd(), "src/assets/input_images");
+  const CATALOG_DIR = path.join(process.cwd(), "public/catalog-images");
 
-  if (!fs.existsSync(catalogDir)) {
-    console.warn("Catalog directory not found:", catalogDir);
+  if (!fs.existsSync(CATALOG_DIR)) {
+    console.warn("Catalog directory not found:", CATALOG_DIR);
     return [];
   }
 
   const metadata = loadImageMetadata();
   const parts: Part[] = [];
 
-  const files = fs.readdirSync(catalogDir).sort();
+  const files = fs.readdirSync(CATALOG_DIR).sort();
 
   for (const filename of files) {
     const ext = path.extname(filename).toLowerCase();
@@ -141,7 +138,7 @@ function buildCatalogContext(): Part[] {
       continue;
     }
 
-    const filePath = path.join(catalogDir, filename);
+    const filePath = path.join(CATALOG_DIR, filename);
     const stats = fs.statSync(filePath);
     if (!stats.isFile()) {
       continue;

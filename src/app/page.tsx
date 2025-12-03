@@ -241,7 +241,7 @@ export default function Home() {
                                 <div className="mt-3">
                                   {/* eslint-disable-next-line @next/next/no-img-element */}
                                   <img
-                                    src={`/api/catalog-image/${encodeURIComponent(
+                                    src={`/catalog-images/${encodeURIComponent(
                                       match.filename
                                     )}`}
                                     alt={`Catalog image: ${match.filename}`}
