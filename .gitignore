@@ -28,3 +28,4 @@ dist-ssr
 .env.sentry-build-plugin
 deploy.sh
 ai-generate-version.sh
+.next

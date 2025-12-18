@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { Upload, X, FileText, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Upload, X, FileText, Loader2, LogOut } from "lucide-react";
 
 interface FaucetMatch {
   filename: string;
@@ -28,8 +29,21 @@ export default function Home() {
   const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.push("/login");
+      router.refresh();
+    } catch {
+      setIsLoggingOut(false);
+    }
+  };
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -166,9 +180,23 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#0f172a] py-8 px-4">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-4xl font-bold text-white mb-2 italic">
-          Faucet Finder Chat
-        </h1>
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-4xl font-bold text-white italic">
+            Faucet Finder Chat
+          </h1>
+          <button
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="flex items-center gap-2 px-4 py-2 text-gray-400 hover:text-white hover:bg-[#1e293b] rounded-lg transition-colors disabled:opacity-50"
+          >
+            {isLoggingOut ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <LogOut className="w-4 h-4" />
+            )}
+            <span className="text-sm">Logout</span>
+          </button>
+        </div>
         <p className="text-gray-400 mb-8">
           Ask the assistant to identify faucets and upload photos when needed.
         </p>
